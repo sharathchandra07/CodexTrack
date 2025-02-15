@@ -130,7 +130,7 @@ function App() {
 
                   <button 
                     type="submit"
-                    className="btn btn-primary w-100"
+                    className="btn btn-success w-100"
                     disabled={!selectedPlatform || !userId || isSubmitting}
                   >
                     {isSubmitting ? 'Processing...' : 'Track Progress'}
