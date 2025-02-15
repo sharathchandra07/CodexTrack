@@ -2,7 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const app = express();
-app.use(cors()); // Allows requests from frontend
+app.use(cors(
+  {
+    origin: ["https://codextrack.vercel.app"],
+    methods: ["POST", "GET"],
+    credentials: true
+  }
+)); // Allows requests from frontend
 app.use(express.json()); // Parses JSON requests
 
 app.get("/api/data", (req, res) => {
