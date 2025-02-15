@@ -11,11 +11,13 @@ app.use(cors({
 
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-    res.json({ success: true, message: "GET request successful!" });
+// API Test Route
+app.get("/", (req, res) => {
+    res.json({ success: true, message: "API is running successfully!" });
 });
 
-app.post("/api/data", async (req, res) => {
+// API Data Fetch Route
+app.post("/data", async (req, res) => {
     const platform = req.body.id;
     const id = req.body.message;
 
@@ -37,5 +39,5 @@ app.post("/api/data", async (req, res) => {
     }
 });
 
-// Export for Vercel (this replaces app.listen)
+// Export for Vercel
 module.exports = app;
