@@ -12,12 +12,12 @@ app.use(cors({
 app.use(express.json());
 
 // API Test Route
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.json({ success: true, message: "API is running successfully!" });
 });
 
 // API Data Fetch Route
-app.post("/data", async (req, res) => {
+app.post("/api/data", async (req, res) => {
     const platform = req.body.id;
     const id = req.body.message;
 
