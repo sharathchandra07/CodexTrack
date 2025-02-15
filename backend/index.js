@@ -1,19 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
-const { model } = require("mongoose");
+// const { model } = require("mongoose");
 
 const app = express();
-app.use(cors({
-    origin: ["https://codextrack.vercel.app"],
-    methods: ["POST", "GET"],
-    credentials: true
-}));
+app.use(cors());
 
 app.use(express.json());
 
 // API Test Route
-app.get("/", (req, res) => {
+app.get("/api/data", (req, res) => {
     res.json({ success: true, message: "API is running successfully!" });
 });
 
@@ -43,4 +39,4 @@ app.post("/api/data", async (req, res) => {
 // Export for Vercel
 app.listen(5000, () => console.log("Server running at port 5000"));
 
-module.exports = app;
+// module.exports = app;
