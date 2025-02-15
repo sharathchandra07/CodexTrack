@@ -1,61 +1,41 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+
 const app = express();
-app.use(cors(
-  {
+app.use(cors({
     origin: ["https://codextrack.vercel.app"],
     methods: ["POST", "GET"],
     credentials: true
-  }
-)); // Allows requests from frontend
-app.use(express.json()); // Parses JSON requests
+}));
+
+app.use(express.json());
 
 app.get("/api/data", (req, res) => {
-  res.json({ success: true, message: "GET request successful!" });
+    res.json({ success: true, message: "GET request successful!" });
 });
-// hello
 
 app.post("/api/data", async (req, res) => {
-  const platform = req.body.id;
-  const id = req.body.message;
-  if (platform === 'Leetcode') { 
+    const platform = req.body.id;
+    const id = req.body.message;
+
     try {
-      const response = await axios.get(`https://leetcode-stats-api.herokuapp.com/${id}`);
-      res.json(response.data);
-      console.log(response.data);
-      if (!response.data.success) {
-        console.log(response.data.message);
-      }
-    } catch {
-      console.log("Error: Failed to Fetch");
+        let response;
+        if (platform === 'Leetcode') {
+            response = await axios.get(`https://leetcode-stats-api.herokuapp.com/${id}`);
+        } else if (platform === 'Codechef') {
+            response = await axios.get(`https://codechef-api.vercel.app/${id}`);
+        } else if (platform === 'CodeForces') {
+            response = await axios.get(`https://codeforces.com/api/user.info?handles=${id}`);
+        } else {
+            return res.status(400).json({ error: "Invalid platform" });
+        }
+        res.json(response.data);
+    } catch (error) {
+        console.error("Error: Failed to Fetch", error);
+        res.status(500).json({ error: "Failed to fetch data" });
     }
-  }
-  if (platform === 'Codechef') {
-    try {
-      const response = await axios.get(`https://codechef-api.vercel.app/${id}`);
-      res.json(response.data);
-      console.log(response.data);
-      if (!response.data.success) {
-        console.log("User does not exist");
-      }
-    } catch {
-      console.log("Error: Failed to Fetch");
-    }
-  }
-  if (platform === 'CodeForces'){
-    try {
-      const response = await axios.get(`https://codeforces.com/api/user.info?handles=${id}`);
-      res.json(response.data);
-      console.log(response.data);
-      if (response.data.status !== 'OK') {
-        console.log("Invalid user id");
-      }
-    } catch {
-      console.log("Error: Failed to Fetch");
-      res.json("User does not exist");
-    }
-  }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// Export for Vercel (this replaces app.listen)
+module.exports = app;
