@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+const { model } = require("mongoose");
 
 const app = express();
 app.use(cors({
@@ -40,4 +41,6 @@ app.post("/api/data", async (req, res) => {
 });
 
 // Export for Vercel
+app.listen(5000, () => console.log("Server running at port 5000"));
+
 module.exports = app;
