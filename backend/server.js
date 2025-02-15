@@ -8,6 +8,7 @@ app.use(express.json()); // Parses JSON requests
 app.get("/api/data", (req, res) => {
   res.json({ success: true, message: "GET request successful!" });
 });
+// hello
 
 app.post("/api/data", async (req, res) => {
   const platform = req.body.id;
