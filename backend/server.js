@@ -11,7 +11,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.get("/api/data", (req, res) => {
+app.get("/", (req, res) => {
     res.json({ success: true, message: "GET request successful!" });
 });
 
