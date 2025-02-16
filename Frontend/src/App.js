@@ -72,8 +72,8 @@ function App() {
           setErrorMessage("User doesn't exist");
         }
       } catch (error) {
-        setErrorMessage('Error fetching data. Please try again.');
-        console.error('Error:', error);
+        setErrorMessage("User doesn't exist");
+        console.error(error);
       } finally {
         setIsSubmitting(false);
       }
