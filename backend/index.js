@@ -6,7 +6,7 @@ const axios = require("axios");
 const app = express();
 app.use(cors(
     {
-        origin: ["https://codex-track-2x18a3p58-sharath-chandras-projects-df63d9ae.vercel.app", "https://localhost:3000"],
+        origin: ["https://codex-track.vercel.app/"],
         methods: ["POST", "GET"],
         credentials: true
     }
@@ -45,4 +45,4 @@ app.post("/api/data", async (req, res) => {
 // Export for Vercel
 app.listen(5000, () => console.log("Server running at port 5000"));
 
-// module.exports = app;
+module.exports = app;
