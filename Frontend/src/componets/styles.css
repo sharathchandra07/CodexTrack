@@ -125,7 +125,7 @@ body {
 }
 
 .btn-success {
-  /* background: linear-gradient(to right, var(--primary), var(--primary-dark)); */
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
   border: none;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
