@@ -23,7 +23,7 @@ function App() {
       setResult({});
 
       try {
-        const response = await axios.post('https://codextrack-5wq2sqrpl-sharath-chandras-projects-df63d9ae.vercel.app', {
+        const response = await axios.post('https://codextrack-5wq2sqrpl-sharath-chandras-projects-df63d9ae.vercel.app/api/data', {
           message: userId,
           id: selectedPlatform,
         });
