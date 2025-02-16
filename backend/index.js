@@ -5,11 +5,11 @@ const axios = require("axios");
 
 const app = express();
 app.use(cors(
-    {
-        origin: ["https://codex-track-3fo99kvdc-sharath-chandras-projects-df63d9ae.vercel.app"],
-        methods: ["POST", "GET"],
-        credentials: true
-    }
+    // {
+    //     origin: ["https://codex-track-3fo99kvdc-sharath-chandras-projects-df63d9ae.vercel.app"],
+    //     methods: ["POST", "GET"],
+    //     credentials: true
+    // }
 ));
 
 app.use(express.json());
