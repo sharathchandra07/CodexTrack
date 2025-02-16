@@ -6,7 +6,7 @@ const axios = require("axios");
 const app = express();
 app.use(cors(
     {
-        origin: ["https://codex-track.vercel.app"],
+        origin: "*",
         methods: ["POST", "GET"],
         credentials: true
     }
