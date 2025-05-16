@@ -24,7 +24,7 @@ function App() {
       setResult({});
 
       try {
-        const response = await axios.post('https://codextrack.vercel.app/api/data', {
+        const response = await axios.post('https://codex-track.vercel.app/api/data', {
           message: userId,
           id: selectedPlatform,
         });
