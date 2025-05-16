@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const puppeteer = require("puppeteer-core");
-const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer");
+// const chromium = require("chrome-aws-lambda");
 
 const app = express();
 app.use(cors());
@@ -55,12 +55,7 @@ app.post("/api/data", async (req, res) => {
            const scrapedData = {};
 
             try {
-                const browser = await puppeteer.launch({
-                    args: chromium.args,
-                    defaultViewport: chromium.defaultViewport,
-                    executablePath: await chromium.executablePath,
-                    headless: chromium.headless,
-                });
+                const browser = await puppeteer.launch({ headless: "new" });
                 const page = await browser.newPage();
                 await page.goto(`https://www.interviewbit.com/profile/${id}/`);
 
@@ -95,12 +90,7 @@ app.post("/api/data", async (req, res) => {
             const scrapedData = {};
 
             try {
-                const browser = await puppeteer.launch({
-                    args: chromium.args,
-                    defaultViewport: chromium.defaultViewport,
-                    executablePath: await chromium.executablePath,
-                    headless: chromium.headless,
-                });
+                const browser = await puppeteer.launch({ headless: "new" });
                 const page = await browser.newPage();
                 await page.goto(`https://www.hackerearth.com/@${id}`);
 
