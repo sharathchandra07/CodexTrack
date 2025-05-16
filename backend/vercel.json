@@ -2,18 +2,10 @@
     "version": 2,
     "builds": [{
         "src": "./index.js",
-        "use": "@vercel/node",
-        "runtime": "nodejs18.x"
+        "use": "@vercel/node"
         }],
     "routes": [{
         "src": "/(.*)",
         "dest": "/"
-    }],
-    "functions": {
-        "api/**/*.js": {
-            "runtime": "nodejs18.x",
-            "memory": 1024,
-            "maxDuration": 10
-        }
-    }
+    }]
 }
