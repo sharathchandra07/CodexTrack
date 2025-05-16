@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { Code2, Award, Trophy } from 'lucide-react';
+import { useState } from 'react';
+import { Award, Trophy, Brain } from 'lucide-react';
 import axios from 'axios';
 import './componets/styles.css';
+
 function App() {
-  const [selectedPlatform, setSelectedPlatform] = useState('Leetcode');
+  const [selectedPlatform, setSelectedPlatform] = useState('');
   const [userId, setUserId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
 
   const platforms = [
-    { id: 'Leetcode', name: 'LeetCode', icon: <Code2 size={24} />, color: '#6366f1' },
-    { id: 'Codechef', name: 'CodeChef', icon: <Award size={24} />, color: '#8b5cf6' },
-    { id: 'CodeForces', name: 'CodeForces', icon: <Trophy size={24} />, color: '#ec4899' },
+    { id: 'Leetcode', name: 'LeetCode', icon: <Brain size={54} />, color: "rgba(0, 204, 255, 0.8)" },
+    { id: 'Codechef', name: 'CodeChef', icon: <Award size={54} />, color: '#8b5cf6' },
+    { id: 'CodeForces', name: 'CodeForces', icon: <Trophy size={54} />, color: '#ec4899' },
   ];
 
   const handleSubmit = async (e) => {
@@ -23,12 +24,12 @@ function App() {
       setResult({});
 
       try {
-        const response = await axios.post('https://codex-track.vercel.app/api/data', {
+        const response = await axios.post('http://localhost:5000/api/data', {
           message: userId,
           id: selectedPlatform,
         });
 
-        console.log('API Response:', response.data);
+        // console.log('API Response:', response.data);
 
         if (!response.data || Object.keys(response.data).length === 0) {
           setErrorMessage("User doesn't exist");
@@ -64,6 +65,12 @@ function App() {
             'Rank': response.data.result[0].rank,
             'Max Rating': response.data.result[0].maxRating,
           };
+        } else if (selectedPlatform === 'GeeksforGeeks') {
+          tempResult = response.data;
+        } else if (selectedPlatform === 'hackerearth') {
+          tempResult = response.data;
+        } else if (selectedPlatform === 'interviewbit') {
+          tempResult = response.data;
         }
 
         if (Object.keys(tempResult).length > 0) {
@@ -73,7 +80,7 @@ function App() {
         }
       } catch (error) {
         setErrorMessage("User doesn't exist");
-        console.error(error);
+        // console.error(error);
       } finally {
         setIsSubmitting(false);
       }
@@ -90,35 +97,42 @@ function App() {
         <div className="row justify-content-center">
           <div className="col-12 col-md-8 col-lg-6">
             <div className="card">
-              <div className="card-body p-4 p-md-5">
-                <h2 className="section-title">Select Your Platform</h2>
+              <div className="card-body p-4 p-md-4">
+                <h2 className="section-title">Track your coding progress</h2>
                 
                 <form onSubmit={handleSubmit}>
                   <div className="row g-4 mb-4">
                     {platforms.map((platform) => (
                       <div key={platform.id} className="col-md-4">
-                        <div 
-                          className={`platform-card p-3 text-center ${selectedPlatform === platform.id ? 'selected' : ''}`}
-                          onClick={() => setSelectedPlatform(platform.id)}
-                        >
                           <div 
                             className="platform-logo"
-                            style={{ color: platform.color }}
+                            style={{ color: platform.color, height: "130px", width: "130px" }}
                           >
                             {platform.icon}
+                          {/* <div className="platform-name">{platform.name}</div> */}
                           </div>
-                          <div className="platform-name">{platform.name}</div>
-                        </div>
                       </div>
                     ))}
+                  </div>
+                  <div className="w-100">
+                    {/* <label for="platform" class="form-label">Choose a Coding Platform</label> */}
+                    <select className="form-select form-control mt-2 from-label form-select-lg shadow text-white" onChange={(e) => setSelectedPlatform(e.target.value)} style={{backgroundColor: "rgba(41,48,68)", borderRadius: "9px"}} name="platform" id="platform">
+                      <option defaultValue="">Select your platform</option>
+                      <option value="Leetcode">Leetcode</option>
+                      <option value="GeeksforGeeks">GeeksforGeeks</option>
+                      <option value="Codechef">CodeChef</option>
+                      <option value="CodeForces">CodeForces</option>
+                      <option value="interviewbit">InterviewBit</option>
+                      {/* <option value="hackerrank">HackerRank</option> */}
+                      <option value="hackerearth">HackerEarth</option>
+                    </select>
                   </div>
 
                   <div className="mb-4">
                     <label htmlFor="userId" className="form-label w-100">
-                      Username
                       <input
                         type="text"
-                        className="form-control mt-2"
+                        className="form-control mt-2 text-white"
                         id="userId"
                         value={userId}
                         onChange={(e) => setUserId(e.target.value)}
@@ -131,7 +145,7 @@ function App() {
                   <button 
                     type="submit"
                     className="btn btn-success w-100"
-                    disabled={!selectedPlatform || !userId || isSubmitting}
+                    disabled={!selectedPlatform || !userId || isSubmitting || selectedPlatform === 'Select your platform'}
                   >
                     {isSubmitting ? 'Processing...' : 'Track Progress'}
                   </button>
