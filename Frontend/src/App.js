@@ -24,7 +24,7 @@ function App() {
       setResult({});
 
       try {
-        const response = await axios.post('http://localhost:5000/api/data', {
+        const response = await axios.post('https://codex-track.onrender.com/api/data', {
           message: userId,
           id: selectedPlatform,
         });
