@@ -24,7 +24,7 @@ function App() {
       setResult({});
 
       try {
-        const response = await axios.post('https://codex-track.onrender.com/api/data', {
+        const response = await axios.post('http://localhost:5000/api/data', {
           message: userId,
           id: selectedPlatform,
         });
@@ -67,9 +67,9 @@ function App() {
           };
         } else if (selectedPlatform === 'GeeksforGeeks') {
           tempResult = response.data;
-        } else if (selectedPlatform === 'hackerearth') {
+        } else if (selectedPlatform === 'spoj') {
           tempResult = response.data;
-        } else if (selectedPlatform === 'interviewbit') {
+        } else if (selectedPlatform === 'atcoder') {
           tempResult = response.data;
         }
 
@@ -122,9 +122,9 @@ function App() {
                       <option value="GeeksforGeeks">GeeksforGeeks</option>
                       <option value="Codechef">CodeChef</option>
                       <option value="CodeForces">CodeForces</option>
-                      <option value="interviewbit">InterviewBit</option>
+                      <option value="spoj">SPOJ</option>
                       {/* <option value="hackerrank">HackerRank</option> */}
-                      <option value="hackerearth">HackerEarth</option>
+                      <option value="atcoder">AtCoder</option>
                     </select>
                   </div>
 

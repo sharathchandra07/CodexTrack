@@ -2,8 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const puppeteer = require("puppeteer");
-// const chromium = require("chrome-aws-lambda");
 
 const app = express();
 app.use(cors());
@@ -51,70 +49,46 @@ app.post("/api/data", async (req, res) => {
             // console.log(scrapedData);
             
             res.json(scrapedData);
-        } else if (platform === 'interviewbit') {
-           const scrapedData = {};
+        } else if (platform === 'spoj') {
 
-            try {
-                const browser = await puppeteer.launch({ headless: "new" });
-                const page = await browser.newPage();
-                await page.goto(`https://www.interviewbit.com/profile/${id}/`);
+            const url = `https://www.spoj.com/users/${id}/`;
+            
+            
+            const { data } = await axios.get(url);
 
+            const $ = cheerio.load(data);
 
-                const notFound = await page.evaluate(() => {
-                    return document.body.innerText.includes("404") || document.body.innerText.includes("not found");
-                });
-
-                if (notFound) {
-                    await browser.close();
-                    return res.status(404).json({ error: "User not found on InterviewBit" });
-                }
-
-
-                scrapedData["User Id"] = id;
-                scrapedData["Easy Solved"] = await page.$eval('div.ib-app-root__content > div > div.profile-main > div.profile-activity > div.profile-activity__cards > div:nth-child(1) > div.profile-progress-card__data > div.profile-progress-card__stats > div.profile-progress-card__stat.profile-progress-card__stat--easy > span:nth-child(2)', el => el.textContent.trim());
-                scrapedData["Medium Solved"] = await page.$eval('div.ib-app-root__content > div > div.profile-main > div.profile-activity > div.profile-activity__cards > div:nth-child(1) > div.profile-progress-card__data > div.profile-progress-card__stats > div.profile-progress-card__stat.profile-progress-card__stat--medium > span:nth-child(2)', el => el.textContent.trim());
-                scrapedData["Hard Solved"] = await page.$eval('div.ib-app-root__content > div > div.profile-main > div.profile-activity > div.profile-activity__cards > div:nth-child(1) > div.profile-progress-card__data > div.profile-progress-card__stats > div.profile-progress-card__stat.profile-progress-card__stat--hard > span:nth-child(2)', el => el.textContent.trim());
-                scrapedData["Global Rank"] = await page.$eval('div.ib-app-root__content > div > div.profile-overview > div:nth-child(2) > div.profile-overview-stat-table__items > div:nth-child(1) > div.profile-overview-stat-table__item-value', el => el.textContent.trim());
-                scrapedData["Problems Solved"] = await page.$eval('div.ib-app-root__content > div > div.profile-overview > div:nth-child(2) > div.profile-overview-stat-table__items > div:nth-child(4) > div.profile-overview-stat-table__item-value', el => el.textContent.trim());
-
-                await browser.close();
-
-                // console.log(scrapedData);
-                res.json(scrapedData);
-
-            } catch (error) {
-                // console.error("Fetch Error:", error.message);
-                res.status(500).json({ error: "Failed to fetch data" });
-            }
-        } else if (platform === 'hackerearth') {
             const scrapedData = {};
 
-            try {
-                const browser = await puppeteer.launch({ headless: "new" });
-                const page = await browser.newPage();
-                await page.goto(`https://www.hackerearth.com/@${id}`);
 
-                scrapedData["Userid"] = id;
-                scrapedData["Level"] = await page.$eval('div.wrapper > div > div > div.right > div:nth-child(1) > div > div.badge-container > div.he-level-badge > div.badge-name.title', el => el.textContent.trim());
-                scrapedData["Points"] = await page.$eval('div.wrapper > div > div > div.right > div:nth-child(1) > div > div.metrics-container > div.points.item > div.metric > div.value', el => el.textContent.trim());
-                scrapedData["Contest Rating"] = await page.$eval('div.wrapper > div > div > div.right > div:nth-child(1) > div > div.metrics-container > div.contest-ratings.item > div.metric > div.value', el => el.textContent.trim());
-                scrapedData["Problems Solved"] = await page.$eval('div.wrapper > div > div > div.right > div:nth-child(1) > div > div.metrics-container > div.problems-solved.item > div.metric > div.value', el => el.textContent.trim());
-                scrapedData["Submissions"] = await page.$eval('div.wrapper > div > div > div.right > div:nth-child(1) > div > div.metrics-container > div.submissions.item > div.metric > div.value', el => el.textContent.trim());
+            scrapedData["User Id"] = id;
+            scrapedData["Global Rank"] = $('p:nth-child(6)').text();
+            scrapedData["Problems Solved"] = $('div:nth-child(2) > div > div.col-md-9 > div:nth-child(2) > div > div.row > div.col-md-6.text-center.valign-center > dl > dd:nth-child(2)').text();
+            scrapedData["Submissions"] = $('div:nth-child(2) > div > div.col-md-9 > div:nth-child(2) > div > div.row > div.col-md-6.text-center.valign-center > dl > dd:nth-child(4)').text();
 
-                await browser.close();
+            res.json(scrapedData);
 
-                // console.log(scrapedData);
-                res.json(scrapedData);
+        } else if (platform === 'atcoder') {
+            const url = `https://atcoder.jp/users/${id}`;
+            
+            
+            const { data } = await axios.get(url);
 
-            } catch (error) {
-                // console.error("Scraping error:", error.message);
-                res.status(500).json({ error: "Scraping failed. Check if the profile exists." });
-            }
+            const $ = cheerio.load(data);
+
+            const scrapedData = {};
+
+
+            scrapedData["Global Rank"] = $('div.row > div.col-md-9.col-sm-12 > table > tbody > tr:nth-child(1) > td').text();
+            scrapedData["Rated Matches"] = $('div.row > div.col-md-9.col-sm-12 > table > tbody > tr:nth-child(4) > td').text()
+            scrapedData["Current Rating"] = $('div.row > div.col-md-9.col-sm-12 > table > tbody > tr:nth-child(2) > td > span').text();
+            scrapedData["Highest Rating"] = $('div.row > div.col-md-9.col-sm-12 > table > tbody > tr:nth-child(3) > td > span.user-red').text();
+
+            res.json(scrapedData);
         } else {
             res.status(400).json({ error: "Invalid platform" });
         }
     } catch (error) {
-        // console.error("Fetch Error:", error.message);
         res.status(500).json({ error: "Failed to fetch data" });
     }
 });
